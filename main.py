@@ -6,6 +6,8 @@ from selenium.common.exceptions import *
 import json, subprocess
 from data.account import *
 from data.login import *
+from data.bank import *
+from data.anchor_management import *
 
 
 neo_accounts_filepath = r'C:\Users\kelse\Documents\NeoLogins.json'
@@ -24,6 +26,21 @@ def read_acct_info_from_json_file(file):
     acct_file.close()                       # close file
     return accts
 
+def Run_dailies(Account):
+    # Bank
+    print('Running Bank Daily')
+    bank = Bank()
+    bank.collect_interest()
+
+    # Bank
+    print('Running Anchor Management')
+    anchor_management = Anchor_Management()
+    bank.collect_interest()
+
+
+
+# main() #########################################################################################
+##################################################################################################
 # bring in list of accounts + info
 accts = read_acct_info_from_json_file(neo_accounts_filepath)
 
@@ -31,19 +48,17 @@ accts = read_acct_info_from_json_file(neo_accounts_filepath)
 for i in accts:
     neo_acct = Account(i["username"], i["password"], i["state"])
 
-    # TODO: Navigate NordVPN to location associated with account
-        # nord_output = subprocess.Popen(nord_vpn_exe)
-        # status = re.split("[\r \n :]", nord_output.communicate()[0].decode("utf-8"))[-2]
-
-        # if status != "Disconnected":
-        #     subprocess.call(["nordvpn", "disconnect"])
 
     # Log in to account
     login_pg = Login(neo_acct)  # Nav to page
-    login_pg.login_to_site()
+    login_pg.login_to_site()    # login to account
+
+    neo_acct.set_driver(login_pg.driver)    # Set account driver to curr driver being used by LoginPg
+    curr_neopoints = neo_acct.get_curr_neopoints()
+    print('Starting off the day with ' + str(curr_neopoints))
 
     # Run Dailies
-    
+    Run_dailies(neo_acct)
     # flag account as having dailies complete account r
 
 
