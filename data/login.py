@@ -1,4 +1,4 @@
-from page import *
+from data.page import *
 
 class Login(Page):
 
@@ -7,8 +7,7 @@ class Login(Page):
     def __init__(self, account):
         self.path += self.path_ext
         self.account = account
-
-        return self.driver
+        self.nav_to_page()
 
     ##################################
     def login_to_site(self):    

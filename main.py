@@ -5,6 +5,7 @@ from selenium.webdriver.support.expected_conditions import presence_of_element_l
 from selenium.common.exceptions import *
 import json, subprocess
 from data.account import *
+from data.login import *
 
 
 neo_accounts_filepath = r'C:\Users\kelse\Documents\NeoLogins.json'
@@ -21,7 +22,6 @@ def read_acct_info_from_json_file(file):
         accts.append(i)
 
     acct_file.close()                       # close file
-
     return accts
 
 # bring in list of accounts + info
@@ -39,6 +39,8 @@ for i in accts:
         #     subprocess.call(["nordvpn", "disconnect"])
 
     # Log in to account
+    login_pg = Login(neo_acct)  # Nav to page
+    login_pg.login_to_site()
 
     # Run Dailies
     
